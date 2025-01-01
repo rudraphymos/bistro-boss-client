@@ -4,6 +4,7 @@ import { AuthContext } from '../../providers/AuthProvider';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import bgImg from '../../assets/others/authentication2.png'
+import Swal from 'sweetalert2';
 
 const Login = () => {
 
@@ -25,11 +26,28 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
+                Swal.fire({
+                    title: "Logged in",
+                    showClass: {
+                      popup: `
+                        animate__animated
+                        animate__fadeInUp
+                        animate__faster
+                      `
+                    },
+                    hideClass: {
+                      popup: `
+                        animate__animated
+                        animate__fadeOutDown
+                        animate__faster
+                      `
+                    }
+                  });
             })
     }
 
-    const handleValidateCaptcha = () => {
-        const user_captcha_value = captchaRef.current.value;
+    const handleValidateCaptcha = (e) => {
+        const user_captcha_value = e.target.value;
         if (validateCaptcha(user_captcha_value)) {
             setDisabled(false);
         }
@@ -71,8 +89,7 @@ const Login = () => {
                                 <label className="label">
                                     <LoadCanvasTemplate></LoadCanvasTemplate>
                                 </label>
-                                <input type="text" ref={captchaRef} placeholder="Type the text above" name="captcha" className="input input-bordered" required />
-                                <button onClick={handleValidateCaptcha} className="btn btn-outline btn-xs mt-2">Validate</button>
+                                <input onBlur={handleValidateCaptcha} type="text" placeholder="Type the text above" name="captcha" className="input input-bordered" required />
                             </div>
                             <div className="form-control mt-6">
                                 <input disabled={disabled} type="submit" value="Login" className="btn bg-[#D1A054] text-white"></input>
