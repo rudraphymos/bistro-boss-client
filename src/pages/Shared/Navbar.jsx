@@ -7,7 +7,7 @@ const Navbar = () => {
         <NavLink to="/menu"><li>Menu</li></NavLink>
         <NavLink to="/order/salad"><li>Order</li></NavLink>
     </>
-    
+
     return (
         <div className="navbar fixed z-10 bg-opacity-50 bg-[#151515] max-w-screen-xl text-white">
             <div className="navbar-start">
@@ -40,7 +40,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                <NavLink to="/login"><button className="btn">Login</button></NavLink>
             </div>
         </div>
     );
