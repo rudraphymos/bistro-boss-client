@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { AuthContext } from '../../providers/AuthProvider';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
-    const captchaRef =  useRef(null);
-
+    const captchaRef = useRef(null);
     const [disabled, setDisabled] = useState(true);
+
+    const { signIn } = useContext(AuthContext);
 
     useEffect(() => {
         loadCaptchaEnginge(6);
@@ -16,14 +19,19 @@ const Login = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(email, password);
+        signIn(email, password)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+            })
     }
 
     const handleValidateCaptcha = () => {
         const user_captcha_value = captchaRef.current.value;
-        if(validateCaptcha(user_captcha_value)) {
+        if (validateCaptcha(user_captcha_value)) {
             setDisabled(false);
         }
-        else{
+        else {
             setDisabled(true);
             alert("Captcha not valid. Please try again.");
         }
@@ -67,6 +75,7 @@ const Login = () => {
                             <input disabled={disabled} type="submit" value="Login" className="btn btn-primary"></input>
                         </div>
                     </form>
+                    <p className='text-[#D1A054]'>New here? <Link to="/signup"><span className='font-semibold'>Create a New Account</span></Link></p>
                 </div>
             </div>
         </div>
