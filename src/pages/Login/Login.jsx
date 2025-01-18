@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import bgImg from '../../assets/others/authentication2.png'
 import Swal from 'sweetalert2';
+import SocialLogin from '../../components/SocialLogin';
 
 const Login = () => {
 
@@ -70,8 +71,8 @@ const Login = () => {
                     <div className="text-center md:w-1/2 lg:text-left">
                         <img src={bgImg} alt="" />
                     </div>
-                    <div className="card bg-base-100 md:w-1/2 max-w-sm shadow-2xl">
-                        <form onSubmit={handleLogin} className="card-body">
+                    <div className="card bg-base-100 md:w-1/2 max-w-sm shadow-2xl py-4">
+                        <form onSubmit={handleLogin} className="card-body py-0">
                             <h1 className="text-5xl font-bold text-center">Login</h1>
                             <div className="form-control">
                                 <label className="label">
@@ -98,6 +99,7 @@ const Login = () => {
                                 <input disabled={disabled} type="submit" value="Login" className="btn bg-[#D1A054] text-white"></input>
                             </div>
                         </form>
+                        <SocialLogin></SocialLogin>
                         <p className='text-[#D1A054] text-center'>New here? <Link to="/signup"><span className='font-semibold'>Create a New Account</span></Link></p>
                     </div>
                 </div>

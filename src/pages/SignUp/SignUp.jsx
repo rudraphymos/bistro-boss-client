@@ -5,30 +5,36 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import bgImg from '../../assets/others/authentication2.png'
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin";
 
 const SignUp = () => {
 
+    const axiosPublic = useAxiosPublic();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const onSubmit = data => {
-        console.log(data);
         createUser(data.email, data.password)
             .then(result => {
                 console.log(result.user);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log('Profile updated');
-                        reset();
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Profile updated",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        navigate('/');
+                        axiosPublic.post('/users', { name: data.name, photoURL: data.photoURL, email: data.email })
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    reset();
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Profile created successfully",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate('/');
+                                }
+                            })
                     })
                     .catch(error => { console.log(error) })
             })
@@ -44,9 +50,9 @@ const SignUp = () => {
                     <div className="text-center lg:text-left">
                         <img src={bgImg} alt="" />
                     </div>
-                    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+                    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl py-4">
                         <h1 className="text-5xl font-bold text-center">Sign Up</h1>
-                        <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+                        <form onSubmit={handleSubmit(onSubmit)} className="card-body py-0">
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text font-semibold">Name</span>
@@ -91,6 +97,7 @@ const SignUp = () => {
                                 <input className="btn bg-[#D1A054] text-white" type="submit" value="Sign Up" />
                             </div>
                         </form>
+                        <SocialLogin></SocialLogin>
                         <p className='text-[#D1A054] text-center'>Already registered? <Link to="/login"><span className='font-semibold'>Go to log in</span></Link></p>
                     </div>
                 </div>
